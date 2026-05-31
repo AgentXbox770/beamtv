@@ -29,26 +29,12 @@ video {
     height: 100vh;
     background: black;
 }
-
-/* logo/image splash */
-#logo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    object-fit: contain;
-    display: none;
-    background: black;
-}
 </style>
 </head>
 
 <body>
 
 <div id="black"></div>
-
-<img id="logo" src="tanixTX5Pro.png" />
 
 <video id="bootVideo" playsinline preload="auto">
     <source src="boot.mp4" type="video/mp4">
@@ -57,38 +43,20 @@ video {
 <script>
 const video = document.getElementById("bootVideo");
 const black = document.getElementById("black");
-const logo = document.getElementById("logo");
 
-// ensure video is primed early
+// force browser to start decoding early
 video.load();
-
-/*
-Timeline:
-0s   -> black
-3s   -> show logo
-4s   -> hide logo
-7s   -> start boot video
-*/
-
-setTimeout(() => {
-    black.style.display = "none";
-    logo.style.display = "block";
-}, 3000);
-
-setTimeout(() => {
-    logo.style.display = "none";
-    black.style.display = "block";
-}, 4000);
 
 setTimeout(() => {
     black.style.display = "none";
     video.style.display = "block";
 
+    // small delay helps some browsers render first frame cleanly
     requestAnimationFrame(() => {
         video.play();
     });
-}, 7000);
 
+}, 3000);
 
 video.onended = () => {
     video.style.display = "none";
